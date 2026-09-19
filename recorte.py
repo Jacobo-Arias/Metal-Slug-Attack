@@ -1,18 +1,22 @@
-def recorte(imagen,limites,ancho,alto = 4):
+def recorte(imagen, limites, ancho, alto=4):
+    """Corta una hoja de sprites en filas según `limites`."""
+    info = imagen.get_rect()
+    an_img = info[2]
+    al_img = info[3]
+    # En Python 2 `/` entre enteros truncaba; pygame.subsurface exige enteros.
+    al_corte = al_img // alto
+    an_corte = an_img // ancho
 
-    info=imagen.get_rect()
-    an_img=info[2]
-    al_img=info[3]
-    al_corte=al_img/alto
-    an_corte=an_img/ancho
-    '''recorte de los usuarios'''
-    k=0
     filas = []
-    for j in limites:
-      fila = []
-      for i in range(j):
-          cuadro=imagen.subsurface(i*an_corte,k*al_corte,an_corte,al_corte)
-          fila.append(cuadro)
-      k+=1
-      filas.append(fila)
+    for k, cantidad in enumerate(limites):
+        fila = []
+        for i in range(cantidad):
+            cuadro = imagen.subsurface(
+                i * an_corte,
+                k * al_corte,
+                an_corte,
+                al_corte,
+            )
+            fila.append(cuadro)
+        filas.append(fila)
     return filas
